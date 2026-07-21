@@ -132,6 +132,22 @@
       0%   { transform: rotateX(-85deg); opacity: 0.4; }
       100% { transform: rotateX(0deg);   opacity: 1; }
     }
+    /* CTA flourish board — brand amber on the teal gradient. Amber alone sits
+       at ~2.0:1 on that teal, which fails WCAG AA for large text. The faint
+       panel darkens the backdrop just enough to reach ~3.5:1. Drop the panel
+       and the amber becomes hard to read for low-vision users. */
+    .cta-flourish { margin: -0.5rem 0 1.6rem; }
+    .flapboard--cta {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4.2vw, 2.5rem);
+      color: var(--amber);
+      --flap-w: 0.72em;
+      padding: 0.28em 0.5em;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.30);
+    }
+    .flapboard--cta .flap::after { background: rgba(0,0,0,0.32); }
+
     .sr-only {
       position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
       overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
@@ -789,6 +805,10 @@
   <div class="container">
     <div class="section-label" style="color:rgba(255,255,255,0.6);">Join Us</div>
     <h2>Downtown Pasco Is Better<br>With You In It</h2>
+    <div class="cta-flourish">
+      <span class="flapboard flapboard--cta" id="flapboard-cta" aria-hidden="true"></span>
+      <span class="sr-only">Dancing</span>
+    </div>
     <p class="lead">Whether you're a business owner, a neighbor, a volunteer, or someone who just loves this community — there's a place for you in PURA. Let's build something together.</p>
     <div class="hero-btns" style="justify-content:center;">
       <a href="mailto:soy@nopaleros.org" class="btn btn-amber">Get in Touch</a>
@@ -816,136 +836,142 @@
 </footer>
 
 <script>
-/* ── Split-flap hero word board ───────────────────────────────────────────
-   Cycles the word after "A Hometown Worth" with an airport-board flip.
-   Tune the four timing constants below to taste.                          */
+/* ── Split-flap word boards ───────────────────────────────────────────────
+   Cycles a word with an airport-board flip. Two boards on this page: the
+   hero headline and the CTA flourish. Each is independent — its own words,
+   its own timing, its own cell count (sized to its longest word).        */
 (function () {
-  var board = document.getElementById('flapboard');
-  if (!board) return;
+  var UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÑ';
+  var LOWER = 'abcdefghijklmnopqrstuvwxyzñ';
+  var reduceMotion = window.matchMedia &&
+                     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ── Timing (ms) ── */
-  var HOLD    = 1700;  // how long a finished word rests before flipping away
-  var SPIN    = 320;   // how long the first column spins
-  var STAGGER = 55;    // extra spin per column, creating the left-to-right cascade
-  var TICK    = 55;    // time between letter changes while spinning
+  function flapboard(board, WORDS, opts) {
+    opts = opts || {};
+    var HOLD    = opts.hold    || 1700;  // how long a finished word rests
+    var SPIN    = opts.spin    || 320;   // how long the first column spins
+    var STAGGER = opts.stagger || 55;    // extra spin per column (the cascade)
+    var TICK    = opts.tick    || 55;    // time between letter changes
 
-  /* ── Words ── add or remove freely; the board resizes to the longest one ── */
-  var WORDS = [
+    var CELLS = WORDS.reduce(function (max, w) { return Math.max(max, w.length); }, 0);
+
+    var cells = [];
+    for (var c = 0; c < CELLS; c++) {
+      var cell = document.createElement('span');
+      cell.className = 'flap is-blank';
+      var glyph = document.createElement('span');
+      glyph.className = 'flap-char';
+      glyph.innerHTML = '&nbsp;';
+      cell.appendChild(glyph);
+      board.appendChild(cell);
+      cells.push(cell);
+    }
+
+    function padCenter(word) {
+      var slack = CELLS - word.length;
+      var left  = Math.floor(slack / 2);
+      return new Array(left + 1).join(' ') + word + new Array(slack - left + 1).join(' ');
+    }
+
+    function randGlyph(target) {
+      var lower = (target >= 'a' && target <= 'z') || target === 'ñ';
+      return (lower ? LOWER : UPPER).charAt(Math.floor(Math.random() * (lower ? LOWER : UPPER).length));
+    }
+
+    function setChar(i, ch) {
+      var glyph = cells[i].firstChild;
+      glyph.textContent = (ch === ' ') ? ' ' : ch;
+      cells[i].classList.toggle('is-blank', ch === ' ');
+      glyph.classList.remove('is-flipping');
+      void glyph.offsetWidth;              // restart the flip animation
+      glyph.classList.add('is-flipping');
+    }
+
+    function show(word) {
+      var t = padCenter(word);
+      for (var i = 0; i < CELLS; i++) setChar(i, t.charAt(i));
+    }
+
+    /* Random order, shuffled in passes so every word shows once per cycle
+       and none repeats back-to-back. */
+    function shuffle(a) {
+      for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+      return a;
+    }
+    var queue = [];
+    function nextWord(prev) {
+      if (!queue.length) {
+        queue = shuffle(WORDS.slice());
+        if (queue[0] === prev && queue.length > 1) queue.push(queue.shift());
+      }
+      return queue.shift();
+    }
+
+    function play(word) {
+      var target = padCenter(word);
+      var stopAt = [];
+      for (var i = 0; i < CELLS; i++) stopAt[i] = SPIN + i * STAGGER;
+
+      var start = null;
+      var last  = -TICK;
+
+      function frame(now) {
+        if (start === null) start = now;
+        var t = now - start;
+
+        if (t - last >= TICK) {
+          last = t;
+          var settled = true;
+          for (var i = 0; i < CELLS; i++) {
+            var ch = target.charAt(i);
+            if (t >= stopAt[i]) {
+              var want = (ch === ' ') ? ' ' : ch;
+              if (cells[i].firstChild.textContent !== want) setChar(i, ch);
+            } else {
+              settled = false;
+              setChar(i, randGlyph(ch));
+            }
+          }
+          if (settled) {
+            setTimeout(function () { play(nextWord(word)); }, HOLD);
+            return;
+          }
+        }
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    var first = nextWord(null);
+    show(first);
+
+    if (reduceMotion) {
+      var current = first;
+      setInterval(function () { current = nextWord(current); show(current); }, HOLD + 900);
+    } else {
+      setTimeout(function () { play(nextWord(first)); }, HOLD);
+    }
+  }
+
+  /* ── Hero headline ── */
+  var hero = document.getElementById('flapboard');
+  if (hero) flapboard(hero, [
     'Celebrating', 'Revitalizing', 'Protecting', 'Restoring', 'Investing',
     'Building', 'Renewing', 'Cherishing', 'Discovering', 'Loving',
     'Trusting', 'Sharing', 'Rooting', 'Keeping', 'Dancing',
     'Celebrando', 'Cuidando', 'Luchando', 'Bailando', 'Cosechando', 'Soñando'
-  ];
+  ]);
 
-  var UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÑ';
-  var LOWER = 'abcdefghijklmnopqrstuvwxyzñ';
-
-  var CELLS = WORDS.reduce(function (max, w) { return Math.max(max, w.length); }, 0);
-
-  var cells = [];
-  for (var c = 0; c < CELLS; c++) {
-    var cell = document.createElement('span');
-    cell.className = 'flap is-blank';
-    var glyph = document.createElement('span');
-    glyph.className = 'flap-char';
-    glyph.innerHTML = '&nbsp;';
-    cell.appendChild(glyph);
-    board.appendChild(cell);
-    cells.push(cell);
-  }
-
-  function padCenter(word) {
-    var slack = CELLS - word.length;
-    var left  = Math.floor(slack / 2);
-    return new Array(left + 1).join(' ') + word + new Array(slack - left + 1).join(' ');
-  }
-
-  function randGlyph(target) {
-    var lower = (target >= 'a' && target <= 'z') || target === 'ñ';
-    var set = lower ? LOWER : UPPER;
-    return set.charAt(Math.floor(Math.random() * set.length));
-  }
-
-  function setChar(i, ch) {
-    var glyph = cells[i].firstChild;
-    glyph.textContent = (ch === ' ') ? ' ' : ch;
-    cells[i].classList.toggle('is-blank', ch === ' ');
-    glyph.classList.remove('is-flipping');
-    void glyph.offsetWidth;              // restart the flip animation
-    glyph.classList.add('is-flipping');
-  }
-
-  function show(word) {
-    var t = padCenter(word);
-    for (var i = 0; i < CELLS; i++) setChar(i, t.charAt(i));
-  }
-
-  /* Random order, but shuffled in passes so every word shows once
-     per cycle and none repeats back-to-back. */
-  function shuffle(a) {
-    for (var i = a.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var t = a[i]; a[i] = a[j]; a[j] = t;
-    }
-    return a;
-  }
-  var queue = [];
-  function nextWord(prev) {
-    if (!queue.length) {
-      queue = shuffle(WORDS.slice());
-      if (queue[0] === prev && queue.length > 1) queue.push(queue.shift());
-    }
-    return queue.shift();
-  }
-
-  function play(word) {
-    var target = padCenter(word);
-    var stopAt = [];
-    for (var i = 0; i < CELLS; i++) stopAt[i] = SPIN + i * STAGGER;
-
-    var start = null;
-    var last  = -TICK;
-
-    function frame(now) {
-      if (start === null) start = now;
-      var t = now - start;
-
-      if (t - last >= TICK) {
-        last = t;
-        var settled = true;
-        for (var i = 0; i < CELLS; i++) {
-          var ch = target.charAt(i);
-          if (t >= stopAt[i]) {
-            var want = (ch === ' ') ? ' ' : ch;
-            if (cells[i].firstChild.textContent !== want) setChar(i, ch);
-          } else {
-            settled = false;
-            setChar(i, randGlyph(ch));
-          }
-        }
-        if (settled) {
-          setTimeout(function () { play(nextWord(word)); }, HOLD);
-          return;
-        }
-      }
-      requestAnimationFrame(frame);
-    }
-    requestAnimationFrame(frame);
-  }
-
-  var reduceMotion = window.matchMedia &&
-                     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  var first = nextWord(null);
-  show(first);
-
-  if (reduceMotion) {
-    // No spinning — just swap the word on a calm interval.
-    var current = first;
-    setInterval(function () { current = nextWord(current); show(current); }, HOLD + 900);
-  } else {
-    setTimeout(function () { play(nextWord(first)); }, HOLD);
-  }
+  /* ── CTA flourish ── a slightly longer hold so the two boards drift out of
+     step with each other instead of flipping in lockstep. ── */
+  var cta = document.getElementById('flapboard-cta');
+  if (cta) flapboard(cta, [
+    'Laughing', 'Smiling', 'Playing', 'Dancing', 'Eating', 'Toasting', 'Partying',
+    'Zapateando', 'Chiflando', 'Bailando', 'Sonriendo', 'Comiendo', 'Brindando'
+  ], { hold: 2000 });
 })();
 </script>
 
