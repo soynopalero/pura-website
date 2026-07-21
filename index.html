@@ -105,6 +105,40 @@
       line-height: 1.2; margin-bottom: 1.2rem; font-weight: 700;
     }
     .hero h1 em { font-style: italic; color: #aaede8; }
+
+    /* ── Split-Flap Word Board ── */
+    .flapboard {
+      display: inline-flex; justify-content: center;
+      font-style: italic; color: #aaede8;
+      --flap-w: 0.7em;
+    }
+    .flap {
+      position: relative; width: var(--flap-w);
+      display: inline-flex; align-items: center; justify-content: center;
+      perspective: 240px;
+    }
+    /* subtle hinge line — the only "mechanical" cue, hidden on blank flaps */
+    .flap::after {
+      content: ''; position: absolute; left: 8%; right: 8%; top: 50%;
+      height: 1px; background: rgba(0,0,0,0.22); pointer-events: none;
+    }
+    .flap.is-blank::after { display: none; }
+    .flap-char {
+      display: inline-block; transform-origin: 50% 50%;
+      backface-visibility: hidden; will-change: transform;
+    }
+    .flap-char.is-flipping { animation: flapTurn 130ms ease-out; }
+    @keyframes flapTurn {
+      0%   { transform: rotateX(-85deg); opacity: 0.4; }
+      100% { transform: rotateX(0deg);   opacity: 1; }
+    }
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .flap-char.is-flipping { animation: none; }
+    }
     .hero p {
       font-size: 1.1rem; opacity: 0.9; max-width: 560px;
       margin: 0 auto 2.4rem; font-weight: 300;
@@ -345,6 +379,7 @@
     @media (max-width: 640px) {
       .nav-links { display: none; }
       .hero { height: 85vh; }
+      .flapboard { --flap-w: 0.6em; }
       section { padding: 3.5rem 1.2rem; }
     }
   </style>
@@ -378,7 +413,7 @@
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-eyebrow">Downtown Pasco, Washington</div>
-    <h1>A Hometown Worth<br><em>Celebrating</em></h1>
+    <h1>A Hometown Worth<br><span class="flapboard" id="flapboard" aria-hidden="true"></span><span class="sr-only">Celebrating</span></h1>
     <p>PURA is a community-rooted nonprofit dedicated to the people, businesses, and stories that make downtown Pasco thrive — today and for generations to come.</p>
     <div class="hero-btns">
       <a class="btn btn-teal" href="#priorities">What We're Doing</a>
@@ -485,7 +520,7 @@
 
       <div class="priority-card">
         <div class="priority-card-img">
-          <img src="686493047_1468813035257045_1941069156427061099_n.jpg" alt="Community partners at Café con Arte Pasco" style="height:200px; object-fit:cover; object-position:center 20%;" />
+          <img src="port-of-pasco.jpg" alt="Port of Pasco staff and families at a community outreach booth" style="height:200px; object-fit:cover; object-position:center 35%;" />
         </div>
         <div class="priority-card-body">
           <div class="priority-icon">🤝</div>
@@ -599,6 +634,7 @@
         <p>PURA's mission is rooted in that legacy. We honor where we've been by investing in the people who are here right now — and by building something together that the next generation will be proud to inherit.</p>
         <ul class="community-list">
           <li>Chinese railroad workers who literally built Pasco in the 1880s</li>
+          <li>Irish and European immigrant laborers who laid the rails and raised the bridges alongside them</li>
           <li>Japanese American entrepreneurs who shaped the early commercial downtown</li>
           <li>Filipino and African American families who built community in the heart of the city</li>
           <li>Mexican and Bracero workers whose families transformed Pasco into one of the most vibrant Hispanic communities in the Pacific Northwest</li>
@@ -778,6 +814,140 @@
   <div>106 N 4th Ave, Pasco, WA 99301 · Washington State Nonprofit Corporation (RCW 24.03A)</div>
   <div style="margin-top:0.5rem; font-size:0.7rem; color:#5a4a44;">Board meets the first Tuesday of each month, 3:00–4:00 PM PDT</div>
 </footer>
+
+<script>
+/* ── Split-flap hero word board ───────────────────────────────────────────
+   Cycles the word after "A Hometown Worth" with an airport-board flip.
+   Tune the four timing constants below to taste.                          */
+(function () {
+  var board = document.getElementById('flapboard');
+  if (!board) return;
+
+  /* ── Timing (ms) ── */
+  var HOLD    = 1700;  // how long a finished word rests before flipping away
+  var SPIN    = 320;   // how long the first column spins
+  var STAGGER = 55;    // extra spin per column, creating the left-to-right cascade
+  var TICK    = 55;    // time between letter changes while spinning
+
+  /* ── Words ── add or remove freely; the board resizes to the longest one ── */
+  var WORDS = [
+    'Celebrating', 'Revitalizing', 'Protecting', 'Restoring', 'Investing',
+    'Building', 'Renewing', 'Cherishing', 'Discovering', 'Loving',
+    'Trusting', 'Sharing', 'Rooting', 'Keeping', 'Dancing',
+    'Celebrando', 'Cuidando', 'Luchando', 'Bailando', 'Cosechando', 'Soñando'
+  ];
+
+  var UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÑ';
+  var LOWER = 'abcdefghijklmnopqrstuvwxyzñ';
+
+  var CELLS = WORDS.reduce(function (max, w) { return Math.max(max, w.length); }, 0);
+
+  var cells = [];
+  for (var c = 0; c < CELLS; c++) {
+    var cell = document.createElement('span');
+    cell.className = 'flap is-blank';
+    var glyph = document.createElement('span');
+    glyph.className = 'flap-char';
+    glyph.innerHTML = '&nbsp;';
+    cell.appendChild(glyph);
+    board.appendChild(cell);
+    cells.push(cell);
+  }
+
+  function padCenter(word) {
+    var slack = CELLS - word.length;
+    var left  = Math.floor(slack / 2);
+    return new Array(left + 1).join(' ') + word + new Array(slack - left + 1).join(' ');
+  }
+
+  function randGlyph(target) {
+    var lower = (target >= 'a' && target <= 'z') || target === 'ñ';
+    var set = lower ? LOWER : UPPER;
+    return set.charAt(Math.floor(Math.random() * set.length));
+  }
+
+  function setChar(i, ch) {
+    var glyph = cells[i].firstChild;
+    glyph.textContent = (ch === ' ') ? ' ' : ch;
+    cells[i].classList.toggle('is-blank', ch === ' ');
+    glyph.classList.remove('is-flipping');
+    void glyph.offsetWidth;              // restart the flip animation
+    glyph.classList.add('is-flipping');
+  }
+
+  function show(word) {
+    var t = padCenter(word);
+    for (var i = 0; i < CELLS; i++) setChar(i, t.charAt(i));
+  }
+
+  /* Random order, but shuffled in passes so every word shows once
+     per cycle and none repeats back-to-back. */
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  var queue = [];
+  function nextWord(prev) {
+    if (!queue.length) {
+      queue = shuffle(WORDS.slice());
+      if (queue[0] === prev && queue.length > 1) queue.push(queue.shift());
+    }
+    return queue.shift();
+  }
+
+  function play(word) {
+    var target = padCenter(word);
+    var stopAt = [];
+    for (var i = 0; i < CELLS; i++) stopAt[i] = SPIN + i * STAGGER;
+
+    var start = null;
+    var last  = -TICK;
+
+    function frame(now) {
+      if (start === null) start = now;
+      var t = now - start;
+
+      if (t - last >= TICK) {
+        last = t;
+        var settled = true;
+        for (var i = 0; i < CELLS; i++) {
+          var ch = target.charAt(i);
+          if (t >= stopAt[i]) {
+            var want = (ch === ' ') ? ' ' : ch;
+            if (cells[i].firstChild.textContent !== want) setChar(i, ch);
+          } else {
+            settled = false;
+            setChar(i, randGlyph(ch));
+          }
+        }
+        if (settled) {
+          setTimeout(function () { play(nextWord(word)); }, HOLD);
+          return;
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  var reduceMotion = window.matchMedia &&
+                     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var first = nextWord(null);
+  show(first);
+
+  if (reduceMotion) {
+    // No spinning — just swap the word on a calm interval.
+    var current = first;
+    setInterval(function () { current = nextWord(current); show(current); }, HOLD + 900);
+  } else {
+    setTimeout(function () { play(nextWord(first)); }, HOLD);
+  }
+})();
+</script>
 
 </body>
 </html>
