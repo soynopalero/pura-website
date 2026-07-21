@@ -132,21 +132,22 @@
       0%   { transform: rotateX(-85deg); opacity: 0.4; }
       100% { transform: rotateX(0deg);   opacity: 1; }
     }
-    /* CTA flourish board — brand amber on the teal gradient. Amber alone sits
-       at ~2.0:1 on that teal, which fails WCAG AA for large text. The faint
-       panel darkens the backdrop just enough to reach ~3.5:1. Drop the panel
-       and the amber becomes hard to read for low-vision users. */
-    .cta-flourish { margin: -0.5rem 0 1.6rem; }
+    /* CTA flourish board — reads as a third line of the headline: same family,
+       size and weight as the h2 above it, set in brand amber. Note the amber
+       measures ~2.0:1 on the teal gradient, below the WCAG AA 3:1 floor for
+       large text; the bold weight aids real-world legibility but does not
+       change the ratio. */
+    .cta-flourish { margin: -1.2rem 0 1.6rem; }
     .flapboard--cta {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(1.6rem, 4.2vw, 2.5rem);
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      font-style: normal;
+      font-weight: 700;
+      line-height: 1.2;
       color: var(--amber);
-      --flap-w: 0.72em;
-      padding: 0.28em 0.5em;
-      border-radius: 10px;
-      background: rgba(0,0,0,0.30);
+      --flap-w: 0.76em;
     }
-    .flapboard--cta .flap::after { background: rgba(0,0,0,0.32); }
+    .flapboard--cta .flap::after { background: rgba(0,0,0,0.28); }
 
     .sr-only {
       position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
