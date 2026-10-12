@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Altares de Pasco · Downtown Pasco Altar Walk — PURA</title>
+  <meta name="description" content="Altares de Pasco returns Oct 31 – Nov 2. Downtown Pasco businesses: put your altar outside and celebrate Día de los Muertos with us. Presented by the Pasco Urban Renewal Alliance." />
+  <link rel="canonical" href="https://puradowntown.org/altares/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://puradowntown.org/altares/" />
+  <meta property="og:title" content="Altares de Pasco · Downtown Pasco Altar Walk" />
+  <meta property="og:description" content="Día de los Muertos · ¡Regresa! · It's back! Sat Oct 31 – Mon Nov 2 in Downtown Pasco." />
+  <meta property="og:image" content="https://puradowntown.org/altares/altares-de-pasco-share.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="628" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700;900&family=Luckiest+Guy&family=Yellowtail&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "Altares de Pasco — Downtown Pasco Altar Walk",
+    "description": "Día de los Muertos altar walk. Downtown Pasco businesses put their ofrendas outside for the community to visit.",
+    "startDate": "2026-10-31",
+    "endDate": "2026-11-02",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "isAccessibleForFree": true,
+    "location": {
+      "@type": "Place",
+      "name": "Downtown Pasco",
+      "address": { "@type": "PostalAddress", "addressLocality": "Pasco", "addressRegion": "WA", "postalCode": "99301", "addressCountry": "US" }
+    },
+    "image": ["https://puradowntown.org/altares/altares-de-pasco-flyer.jpg"],
+    "organizer": {
+      "@type": "Organization",
+      "name": "Pasco Urban Renewal Alliance",
+      "url": "https://puradowntown.org",
+      "email": "soy@nopaleros.org",
+      "telephone": "+1-509-859-7290"
+    }
+  }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      /* PURA site palette (nav + footer) */
+      --text:      #2A3830;
+      --text-soft: #5A6E68;
+      --teal:      #3DAAA0;
+      --cream:     #FAF5ED;
+      --cream-dark:#F0E8D8;
+      --white:     #FFFFFF;
+      /* Altares flyer palette */
+      --magenta: #D6136F;
+      --orange:  #F57C00;
+      --aqua:    #16B3AC;
+      --yellow:  #FBBF24;
+      --purple:  #6A1F8F;
+      --maroon:  #5A1E1E;
+      --paper:   #FFFAF3;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Lato', sans-serif; color: var(--text);
+      background: var(--paper); line-height: 1.7; font-weight: 400;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── PURA nav (matches homepage) ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--white); border-bottom: 2px solid var(--cream-dark);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 110px;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 1.2rem; }
+    .nav-logo-img {
+      height: 90px; width: 90px; background: #f5ead8; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;
+    }
+    .nav-logo-img img { width: 90px; height: 90px; object-fit: contain; }
+    .nav-logo-text {
+      font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--text);
+      letter-spacing: 0.03em; line-height: 1.15; font-weight: 700;
+    }
+    .nav-logo-text span {
+      display: block; font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--teal); font-family: 'Lato', sans-serif; font-weight: 700;
+    }
+    .nav-links { display: flex; gap: 1.8rem; }
+    .nav-links a {
+      color: var(--text-soft); font-size: 0.8rem; letter-spacing: 0.06em;
+      text-transform: uppercase; font-weight: 700; transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a[aria-current] { color: var(--magenta); }
+
+    /* ── Papel picado ── */
+    .picado { display: flex; gap: 6px; padding: 0 6px; }
+    .flag {
+      flex: 1 1 0; min-width: 0; height: 84px; position: relative;
+      -webkit-mask: radial-gradient(circle 7px at 50% 100%, #0000 98%, #000) 0 0 / 18px 100%;
+              mask: radial-gradient(circle 7px at 50% 100%, #0000 98%, #000) 0 0 / 18px 100%;
+    }
+    .flag svg { position: absolute; inset: 0; margin: auto; width: 46%; max-width: 50px; height: auto; }
+    .flag:nth-child(5n+1) { background: var(--magenta); }
+    .flag:nth-child(5n+2) { background: var(--orange); }
+    .flag:nth-child(5n+3) { background: var(--aqua); }
+    .flag:nth-child(5n+4) { background: var(--yellow); }
+    .flag:nth-child(5n+5) { background: var(--purple); }
+
+    /* ── Event hero ── */
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.25rem; }
+    .ev-hero { text-align: center; padding: 2.8rem 0 1.5rem; }
+    .eyebrow {
+      font-weight: 900; letter-spacing: .14em; text-transform: uppercase;
+      font-size: .75rem; color: var(--text-soft); margin-bottom: .6rem;
+    }
+    .ev-hero h1 {
+      font-family: 'Luckiest Guy', sans-serif; font-weight: 400; color: var(--orange);
+      font-size: clamp(3.4rem, 12vw, 8rem); line-height: .95; letter-spacing: .01em;
+      text-shadow: 4px 4px 0 var(--maroon);
+    }
+    .script {
+      font-family: 'Yellowtail', cursive; color: var(--magenta);
+      font-size: clamp(2rem, 6vw, 3.8rem); line-height: 1.1; margin: .4rem 0 1.4rem;
+    }
+    .ribbon {
+      display: inline-block; background: var(--maroon); color: #fff;
+      font-family: 'Luckiest Guy', sans-serif; letter-spacing: .04em;
+      font-size: clamp(.95rem, 2.8vw, 1.45rem); padding: .75rem 2.8rem;
+      clip-path: polygon(0 0, 100% 0, calc(100% - 22px) 50%, 100% 100%, 0 100%, 22px 50%);
+    }
+    .dates { margin: 1.9rem 0 .4rem; font-family: 'Luckiest Guy', sans-serif; line-height: 1.12; font-size: clamp(1.8rem, 5.6vw, 3.2rem); }
+    .dates .es { color: var(--magenta); }
+    .dates .en { color: var(--maroon); }
+
+    .btns { display: flex; flex-wrap: wrap; justify-content: center; gap: .8rem; margin-top: 1.6rem; }
+    .btn {
+      display: inline-block; padding: .85rem 1.8rem; border-radius: 50px;
+      font-size: .84rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 900;
+      border: 2px solid var(--maroon); transition: transform .15s, box-shadow .15s, background .2s;
+    }
+    .btn:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--maroon); }
+    .btn-orange { background: var(--orange); border-color: var(--orange); color: #fff; }
+    .btn-ghost { background: var(--white); color: var(--maroon); }
+
+    /* ── Sections ── */
+    .ev-section { padding: 3rem 0; }
+    h2 {
+      font-family: 'Luckiest Guy', sans-serif; font-weight: 400; color: var(--magenta);
+      font-size: clamp(1.9rem, 4.6vw, 2.7rem); line-height: 1.05; margin-bottom: 1rem;
+    }
+    h2 .en { display: block; color: var(--maroon); font-size: .6em; margin-top: .35rem; }
+    .lede { max-width: 760px; font-size: 1.08rem; }
+    .es-line { margin-bottom: .4rem; }
+    .en-line { color: var(--maroon); }
+
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; margin-top: 1.8rem; }
+    .card { background: var(--white); border: 3px solid var(--orange); border-radius: 20px; padding: 1.6rem 1.7rem; }
+    .card.alt { border-color: var(--aqua); }
+    .card h3 { font-size: 1.3rem; font-weight: 900; line-height: 1.25; margin-bottom: .8rem; }
+    .card h3 small { display: block; font-size: .95rem; font-weight: 700; color: var(--text-soft); }
+    .card ol, .card ul { padding-left: 1.3rem; }
+    .card li { margin-bottom: .8rem; }
+    .card li span { display: block; color: var(--maroon); font-size: .95rem; }
+
+    .elements {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: .8rem;
+      background: var(--white); border: 3px solid var(--orange); border-radius: 20px;
+      padding: 1.6rem .8rem; text-align: center;
+    }
+    .el svg { width: 64px; height: 64px; margin: 0 auto .5rem; display: block; }
+    .el b { display: block; font-weight: 900; font-size: 1.05rem; }
+    .el span { color: var(--maroon); font-weight: 700; }
+
+    .pumpkin {
+      display: flex; gap: 1.1rem; align-items: center;
+      background: #FFF0DD; border-radius: 20px; padding: 1.2rem 1.5rem; margin-top: 1.4rem;
+    }
+    .pumpkin svg { flex: 0 0 56px; width: 56px; height: 56px; }
+
+    .flyer { display: grid; grid-template-columns: 1fr 1.1fr; gap: 2.2rem; align-items: center; }
+    .flyer img { width: 100%; height: auto; border-radius: 12px; box-shadow: 0 10px 30px rgba(90,30,30,.18); }
+    .flyer .btns { justify-content: flex-start; }
+
+    .join { background: var(--maroon); color: #fff; padding: 3.2rem 0; }
+    .join h2 { color: var(--yellow); }
+    .join h2 .en { color: #fff; }
+    .join-grid { display: flex; flex-wrap: wrap; gap: 1.8rem; align-items: center; justify-content: space-between; }
+    .contact { font-size: 1.2rem; font-weight: 700; }
+    .contact div { margin: .3rem 0; }
+    .contact a { border-bottom: 2px solid var(--orange); }
+    .join .btn-ghost { background: transparent; color: #fff; border-color: #fff; }
+    .join .btn:hover { box-shadow: 4px 4px 0 var(--orange); }
+
+    /* ── PURA footer (matches homepage) ── */
+    footer {
+      background: var(--text); color: rgba(255,255,255,0.4);
+      padding: 3rem 2rem; text-align: center; font-size: 0.8rem; line-height: 2;
+    }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: rgba(255,255,255,0.85); margin-bottom: 0.5rem; }
+    .footer-links { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin: 0.5rem 0 1rem; }
+    .footer-links a { color: rgba(255,255,255,0.35); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--teal); }
+
+    /* ── Responsive ── */
+    @media (max-width: 1000px) {
+      nav { padding: 0 1.2rem; }
+      .nav-logo { gap: 0.8rem; }
+      .nav-links { gap: 1rem; }
+      .nav-links a { font-size: 0.72rem; }
+    }
+    @media (max-width: 760px) {
+      .two, .flyer { grid-template-columns: 1fr; }
+      .elements { grid-template-columns: repeat(2, 1fr); row-gap: 1.4rem; }
+      .flyer .btns { justify-content: center; }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 0 1rem; height: 84px; }
+      .nav-logo-img, .nav-logo-img img { width: 64px; height: 64px; }
+      .nav-logo-text { font-size: 1.6rem; }
+      .nav-logo-text span { font-size: .62rem; }
+      .nav-links { display: none; }
+      .flag:nth-child(n+6) { display: none; }
+      .flag { height: 64px; }
+    }
+  </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="flor" viewBox="0 0 40 40">
+    <g fill="#fff">
+      <circle cx="20" cy="20" r="5"/>
+      <ellipse cx="20" cy="8" rx="4" ry="7"/><ellipse cx="20" cy="32" rx="4" ry="7"/>
+      <ellipse cx="8" cy="20" rx="7" ry="4"/><ellipse cx="32" cy="20" rx="7" ry="4"/>
+      <ellipse cx="11.5" cy="11.5" rx="3.5" ry="6" transform="rotate(-45 11.5 11.5)"/>
+      <ellipse cx="28.5" cy="28.5" rx="3.5" ry="6" transform="rotate(-45 28.5 28.5)"/>
+      <ellipse cx="28.5" cy="11.5" rx="3.5" ry="6" transform="rotate(45 28.5 11.5)"/>
+      <ellipse cx="11.5" cy="28.5" rx="3.5" ry="6" transform="rotate(45 11.5 28.5)"/>
+    </g>
+  </symbol>
+</svg>
+
+<!-- Nav -->
+<nav>
+  <a class="nav-logo" href="/">
+    <div class="nav-logo-img"><img src="../logo.png" alt="PURA Logo" /></div>
+    <div class="nav-logo-text">PURA<span>Pasco Urban Renewal Alliance</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="/#priorities">Our Work</a>
+    <a href="/#history">Our Story</a>
+    <a href="/#board">Board</a>
+    <a href="/altares/" aria-current="page">Altares de Pasco</a>
+    <a href="/#cta">Get Involved</a>
+  </div>
+</nav>
+
+<!-- Papel picado -->
+<div class="picado" aria-hidden="true">
+  <div class="flag"><svg><use href="#flor"/></svg></div>
+  <div class="flag"><svg><use href="#flor"/></svg></div>
+  <div class="flag"><svg><use href="#flor"/></svg></div>
+  <div class="flag"><svg><use href="#flor"/></svg></div>
+  <div class="flag"><svg><use href="#flor"/></svg></div>
+  <div class="flag"><svg><use href="#flor"/></svg></div>
+  <div class="flag"><svg><use href="#flor"/></svg></div>
+  <div class="flag"><svg><use href="#flor"/></svg></div>
+  <div class="flag"><svg><use href="#flor"/></svg></div>
+  <div class="flag"><svg><use href="#flor"/></svg></div>
+</div>
+
+<header class="ev-hero wrap">
+  <p class="eyebrow">Pasco Urban Renewal Alliance presenta · presents</p>
+  <h1>Altares<br>de Pasco</h1>
+  <p class="script">Downtown Pasco Altar Walk</p>
+  <div class="ribbon">Día de los Muertos · ¡Regresa! · It's back!</div>
+  <div class="dates">
+    <div class="es">Sáb 31 Oct – Lun 2 Nov</div>
+    <div class="en">Sat Oct 31 – Mon Nov 2</div>
+  </div>
+  <div class="btns">
+    <a class="btn btn-orange" href="mailto:soy@nopaleros.org?subject=Altares%20de%20Pasco%20-%20Mi%20negocio%20participa%20%2F%20My%20business%20is%20in">Inscriba su negocio · Sign up your business</a>
+    <a class="btn btn-ghost" href="#visitar">Visite los altares · Visit the altars</a>
+  </div>
+</header>
+
+<main>
+  <section class="ev-section wrap">
+    <h2>¿Qué es Altares de Pasco?<span class="en">What is Altares de Pasco?</span></h2>
+    <div class="lede">
+      <p class="es-line">Negocios del centro: <strong>pongan su ofrenda afuera</strong> y celebren con nosotros. Del 31 de octubre al 2 de noviembre, el centro de Pasco se llena de altares para que toda la comunidad camine, recuerde y celebre a quienes ya se nos adelantaron.</p>
+      <p class="en-line">Downtown businesses: <strong>put your altar outside</strong> and celebrate with us. From October 31 to November 2, Downtown Pasco fills with ofrendas so the whole community can walk, remember, and celebrate the loved ones who came before us.</p>
+    </div>
+
+    <div class="two">
+      <div class="card">
+        <h3>Para negocios del centro<small>For downtown businesses</small></h3>
+        <ol>
+          <li>Avísenos que participa.<span>Let us know you're joining.</span></li>
+          <li>Ponga su ofrenda afuera del 31 de octubre al 2 de noviembre.<span>Put your altar outside Oct 31 – Nov 2.</span></li>
+          <li>Celebre con nosotros y reciba a los visitantes.<span>Celebrate with us and welcome the walkers.</span></li>
+        </ol>
+      </div>
+      <div class="card alt" id="visitar">
+        <h3>Para la comunidad<small>For the community</small></h3>
+        <ul>
+          <li>Camine por el centro de Pasco y visite los altares.<span>Stroll Downtown Pasco and visit the altars.</span></li>
+          <li>Venga con su familia.<span>Bring the whole family.</span></li>
+          <li>Apoye a los negocios locales que participan.<span>Support the local businesses taking part.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="ev-section wrap" style="padding-top:0">
+    <h2>Elementos de la ofrenda<span class="en">What goes on an ofrenda</span></h2>
+    <div class="elements">
+      <div class="el">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="28" r="20" fill="#F57C00"/><circle cx="32" cy="28" r="14" fill="#FB8C00"/><circle cx="32" cy="28" r="8" fill="#FBBF24"/><circle cx="32" cy="28" r="3.5" fill="#E65100"/><rect x="30.5" y="48" width="3" height="12" fill="#2E7D32"/></svg>
+        <b>Cempasúchil</b><span>Marigolds</span>
+      </div>
+      <div class="el">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="8" y="16" width="28" height="34" rx="2" transform="rotate(-8 22 33)" fill="#fff" stroke="#5A1E1E" stroke-width="3"/><circle cx="19" cy="30" r="5" fill="#16B3AC"/><rect x="28" y="12" width="28" height="34" rx="2" transform="rotate(8 42 29)" fill="#fff" stroke="#5A1E1E" stroke-width="3"/><circle cx="42" cy="25" r="5" fill="#D6136F"/><path d="M33 40c2-7 16-7 18 0z" fill="#D6136F"/></svg>
+        <b>Fotos</b><span>Photos</span>
+      </div>
+      <div class="el">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="18" y="30" width="10" height="28" rx="2" fill="#fff" stroke="#5A1E1E" stroke-width="3"/><rect x="36" y="22" width="10" height="36" rx="2" fill="#fff" stroke="#5A1E1E" stroke-width="3"/><path d="M23 18c4 5 3 9 0 9s-4-4 0-9z" fill="#F57C00"/><path d="M41 10c4 5 3 9 0 9s-4-4 0-9z" fill="#F57C00"/></svg>
+        <b>Velas</b><span>Candles</span>
+      </div>
+      <div class="el">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M8 48a24 22 0 0 1 48 0z" fill="#D99A4E" stroke="#5A1E1E" stroke-width="3"/><path d="M18 40c8-6 20-6 28 0M32 26v20" stroke="#8A4B1C" stroke-width="4" stroke-linecap="round" fill="none"/><circle cx="32" cy="24" r="4" fill="#8A4B1C"/></svg>
+        <b>Pan de muerto</b><span>&nbsp;</span>
+      </div>
+      <div class="el">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M16 8h32l-4 50H20z" fill="#fff" stroke="#5A1E1E" stroke-width="3"/><path d="M18 24h28l-3 32H21z" fill="#16B3AC"/></svg>
+        <b>Agua</b><span>Water</span>
+      </div>
+    </div>
+
+    <div class="pumpkin">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 14c2-6 6-8 10-7" stroke="#2E7D32" stroke-width="4" fill="none" stroke-linecap="round"/><ellipse cx="22" cy="38" rx="14" ry="18" fill="#F57C00"/><ellipse cx="42" cy="38" rx="14" ry="18" fill="#F57C00"/><ellipse cx="32" cy="38" rx="11" ry="19" fill="#FB8C00"/></svg>
+      <div>
+        <p class="es-line"><strong>¿Da dulces el 31?</strong> Ponga una calabaza naranja afuera.</p>
+        <p class="en-line"><strong>Giving out candy on the 31st?</strong> Put an orange pumpkin out front.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ev-section wrap" style="padding-top:0">
+    <div class="flyer">
+      <img src="altares-de-pasco-flyer.jpg" width="1600" height="2000" loading="lazy"
+           alt="Volante de Altares de Pasco: Downtown Pasco Altar Walk, Día de los Muertos, sábado 31 de octubre a lunes 2 de noviembre." />
+      <div>
+        <h2>Comparta el volante<span class="en">Share the flyer</span></h2>
+        <p class="es-line">Descárguelo, imprímalo para su ventana o compártalo en redes.</p>
+        <p class="en-line">Download it, print it for your window, or share it on social.</p>
+        <div class="btns">
+          <a class="btn btn-orange" href="altares-de-pasco-flyer.jpg" download>Descargar · Download</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<section class="join">
+  <div class="wrap join-grid">
+    <div>
+      <h2>¡Únase! · Join us!<span class="en">¿Preguntas? · Questions?</span></h2>
+      <div class="contact">
+        <div><a href="tel:+15098597290">509.859.7290</a></div>
+        <div><a href="mailto:soy@nopaleros.org">soy@nopaleros.org</a></div>
+      </div>
+    </div>
+    <a class="btn btn-ghost" href="mailto:soy@nopaleros.org?subject=Altares%20de%20Pasco%20-%20Mi%20negocio%20participa%20%2F%20My%20business%20is%20in">Inscriba su negocio · Sign up your business</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-logo">Pasco Urban Renewal Alliance</div>
+  <div class="footer-links">
+    <a href="/#priorities">Our Work</a>
+    <a href="/#four-point">Main Street</a>
+    <a href="/#history">Our Story</a>
+    <a href="/#board">Board</a>
+    <a href="/altares/">Altares de Pasco</a>
+    <a href="mailto:soy@nopaleros.org">Contact</a>
+  </div>
+  <div>106 N 4th Ave, Pasco, WA 99301 · Washington State Nonprofit Corporation (RCW 24.03A)</div>
+</footer>
+
+</body>
+</html>
